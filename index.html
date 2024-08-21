@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body on an Inclined Plane Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <h1>Inclined Plane Calculator</h1>
+    </header>
+    <section class="user-inputs">
+        <!-- User enters body's properties -->
+        <div class="subhead">
+            <h2 id="body-of-interest">Body of interest</h2>
+            <div class="tip-container">
+                <img src="/FBD-calc/assets/help.png" id="help-icon" alt="help">
+                <p class="tooltip-text hidden">Fill three variables m, a, θ, or μ. 
+                    If excluding mass, force due to friction is required 
+                </p>
+            </div>
+        </div>
+        <form action="" method="get" class="form-inputs"> 
+            <!-- Have inputs but checked to be numbers -->
+            <legend>Mass</legend>
+            <div class="input-container" >
+                <input type="number" step="0.01" name="mass" placeholder="m" id="in-mass"/> 
+                <label>kg</label>
+            </div>
+            <legend>Acceleration</legend>
+            <div class="input-container" >
+                <input type="number" step="0.01"  name="acceleration" placeholder="a" id="in-a"/> 
+                <label>m/s<sup>2</sup></label>
+            </div>
+            <legend>Static friction coefficient</legend>
+            <div class="input-container" >
+                <input type="number" step="0.01"  name="mu-s" placeholder="μs" id="in-mu-s"/> 
+            </div>
+            <legend>Kinetic friction coefficient</legend>
+            <div class="input-container" >
+                <input type="number" step="0.01"  name="mu-k" placeholder="μk" id="in-mu-k"/> 
+            </div>
+            <legend>Friction force</legend>
+            <div class="input-container">
+                <input type="number" step="0.01"  name="f1" placeholder="Ff" id="in-ff"/> 
+                <label>N</label>
+            </div>
+            <legend>Slope of plane</legend>
+            <div class="input-container">
+                <input type="number" step="0.01"  name="theta" placeholder="θ" id="in-plane-slope"/> 
+                <label>°</label>
+            </div>
+            <div class="hidden" id="external-force-container">
+                <legend>External force</legend>
+                <div class="input-container">
+                <input type="number" step="0.01"  name="f1" placeholder="F1" id="in-f1"/> 
+                    <label>N</label>
+                </div>
+                <legend>Angle of external force</legend>
+                <div class="input-container">
+                    <input type="number" step="0.01"  name="theta" placeholder="θ" id="in-f1-angle"/> 
+                    <label>°</label>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="add-force-button">Add External Force</button>
+            <div><div>
+                <button type="button" class = "hidden" id="remove-force-button">Remove External Force</button>
+            <div>
+            </div>
+            
+                <input type="submit" value="Solve" class="submit-button"/>
+            </div>
+        </form>
+        
+    </section>
+    <section class="fbd-container">
+        <!-- Responsive free body diagram -->
+        <section class="fbd">
+            <div class="angle-container">
+                <div class="mass-1">m</div>
+                <div class="slope"></div>
+                <div class="arrow-container" id="f1">
+                    <div class="arrow-top"></div>
+                    <div class="arrow-bottom"></div>
+                    <div class="arrow-body"></div>
+                    <p class="arrow-label">[F<sub>1</sub>]</p>
+                </div>
+            </div> 
+        </section>
+    </section>
+    <section class="solution">
+        <!-- Step by step solve for net force on body -->
+         <section class="step">
+            <h3>Step 1</h3>
+            <p>Identify the body of interest. It will have mass <em>m</em>, 
+                and is shown as a block in the diagram above.</p>
+            <section class="fbd">
+                <div class="mass-1">m</div>
+            </section>
+         </section>
+         <section class="step">
+            <h3>Step 2</h3>
+            <p>Identify the forces acting on the object. The force due to gravity is denoted as <em>F<sub>g</sub></em>
+            , the normal force is denoted as <em>F<sub>N</sub></em>, and the force due to friction is 
+            <em>F<sub>f</sub></em>. If there is an external force it is denoted as <em>F<sub>1</sub></em>.
+            </p>
+            <section class="fbd">
+                <div class="mass-1">m</div>
+                <div class="arrow-container fn">
+                    <div class="arrow-top"></div>
+                    <div class="arrow-bottom"></div>
+                    <div class="arrow-body"></div>
+                    <p class="arrow-label fn-label">[F<sub>N</sub>]</p>
+                </div>
+                <div class="arrow-container f1">
+                    <div class="arrow-top"></div>
+                    <div class="arrow-bottom"></div>
+                    <div class="arrow-body"></div>
+                    <p class="arrow-label f1-label">[F<sub>1</sub>]</p>
+                </div>
+                <div class="arrow-container ff">
+                    <div class="arrow-top"></div>
+                    <div class="arrow-bottom"></div>
+                    <div class="arrow-body"></div>
+                    <p class="arrow-label ff-label">[F<sub>f</sub>]</p>
+                </div>
+                <div class="arrow-container fg">
+                    <div class="arrow-top"></div>
+                    <div class="arrow-bottom"></div>
+                    <div class="arrow-body"></div>
+                    <p class="arrow-label fg-label">[F<sub>g</sub>]</p>
+                </div>
+            </section>
+         </section>
+         <section class="step">
+            <h3>Step 3</h3>
+            <p>Orient your axis so that the x-axis is parallel to the plane your object of intrest is sitting on.</p>
+            <section class="fbd">
+                <div class="angle-container" id="step3-container">
+                    <div class="mass-1" id="step3-mass">m</div>
+                    <div class="slope"></div>
+                    <div class="arrow-container fn">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label rotate-label fn-label">[F<sub>N</sub>]</p>
+                    </div>
+                    <div class="arrow-container f1">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label rotate-label f1-label">[F<sub>1</sub>]</p>
+                    </div>
+                    <div class="arrow-container ff">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label rotate-label ff-label">[F<sub>f</sub>]</p>
+                    </div>
+                    <div class="arrow-container fg" id="step3-fg">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label rotate-label fg-label">[F<sub>g</sub>]</p>
+                    </div>
+                </div> 
+            </section>
+         </section>
+         <section class="step">
+            <h3>Step 4</h3>
+            <p>Break down force into their x and y components using trigonometry.</p>
+            <section class="fbd">
+                <div class="angle-container">
+                    <div class="mass-1">m</div>
+                    <div class="slope"></div>
+                    <div class="arrow-container step4" id="f1">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label">[F<sub>1</sub>]</p>
+                    </div>
+                    <div class="arrow-container step4" id="ff">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label" id="ff-label">[F<sub>f</sub>]</p>
+                    </div>
+                </div> 
+            </section>
+         </section>
+         <section class="step">
+            <h3>Step 5</h3>
+            <p>Identify which forces are positive and negative. Forces in going to the right or up are postitive,
+                and forces going to the left or down are negative. 
+            </p>
+            <section class="fbd">
+                <div class="angle-container">
+                    <div class="mass-1">m</div>
+                    <div class="slope"></div>
+                    <div class="arrow-container step5" id="f1">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label">[F<sub>1</sub>]</p>
+                    </div>
+                    <div class="arrow-container step5" id="ff">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label" id="ff-label">[F<sub>f</sub>]</p>
+                    </div>
+                </div> 
+            </section>
+         </section>
+         <section class="step">
+            <h3>Step 6</h3>
+            <p>Sum your forces in the x and y directions. </p>
+            <div class="calc-container">
+                <p>ΣF<sub>x</sub>=F<sub>gx</sub>-F<sub>f</sub>=0</p>
+                <p>ΣF<sub>y</sub>=-F<sub>gy</sub>+F<sub>N</sub>=0</p>
+            </div>
+         </section>
+         <section class="step">
+            <h3>Step 7</h3>
+            <p>Solve for your unknowns. </p>
+            <div class="calc-container"></div>
+         </section>
+    </section>
+    <script src="script.js"></script>
+    <footer>
+        <p>Free Body Diagram Calculator by Alex Sidell</p>
+    </footer>
+</body>
+</html>

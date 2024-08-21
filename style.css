@@ -1,0 +1,211 @@
+/* Generic styles */
+body {
+    font-family: 'Roboto Mono';
+    margin: 0;
+}
+
+header, footer{
+    background-color: blueviolet;
+    color: whitesmoke;
+    padding: 0rem 1rem;
+    height: min-content;
+    display: flex;
+    align-items: center;
+}
+h1{
+    font-size: 6vw;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* User input section*/
+.subhead{
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+    max-height: 50px;
+}
+#help-icon {
+    max-width: 20px;
+    aspect-ratio: 1/1;
+}
+
+.tooltip-text {
+    position: relative;
+    top: -15
+    px;
+    left: 10px;
+    z-index: 1;
+    font-size: 10px;
+    color:whitesmoke;
+    background-color: #626e77;
+    border-radius: 0 3px 3px 3px;
+    padding: 2px;
+    max-width: 20rem;
+}
+
+#body-of-interest {
+    min-width: max-content;
+    margin-top: 0;
+}
+
+.tip-container {
+    display: relative;
+}
+
+.user-inputs {
+    margin: 5%;
+}
+
+.form-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#external-force-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.submit-button {
+    display: flex;
+    width:5rem;
+    margin: 1rem 0rem;
+}
+
+.generated-value {
+    color: blue;
+}
+
+/* Free Body Diagram section*/
+.fbd {
+    background-color: whitesmoke;
+    border: 1px grey solid;
+    border-radius: 4px;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.fbd-container {
+    margin:5%;
+}
+
+.calc-container {
+    background-color: whitesmoke;
+    border: 1px grey solid;
+    border-radius: 4px;
+    aspect-ratio: 4/3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.angle-container{
+    /* Transform rotate based on user input*/
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mass-1 {
+    height: 50px;
+    width: 100px;
+    background-color: #b5d8eb;
+    color: #171717;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: #171717 1px solid;
+    position: absolute;
+    z-index: 1;
+}
+
+.slope {
+    height: 4px;
+    width: 18rem;
+    background-color: #dfb8f5;
+    position: absolute;
+    top: 25px;
+
+}
+
+/* Arrow construction */
+.arrow-top {
+    height: 1px;
+    width: 15px;
+    background-color: #171717;
+    transform: rotate(45deg) translateY(-7.5px);
+    position: absolute;
+    left:33px;
+}
+
+.arrow-bottom {
+    height: 1px;
+    width: 15px;
+    background-color: #171717;
+    transform: rotate(-45deg) translateY(7.5px);
+    position: absolute;
+    left:33px;
+}
+
+.arrow-body {
+    height: 1px;
+    width: 50px;
+    background-color: #171717;
+    position: absolute;
+}
+
+.arrow-container {
+    transform: rotate(0deg) translateX(50px);
+    position: relative;
+}
+
+.arrow-label {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 500;
+    left: 50px;
+    top: -10px;
+}
+
+
+/* Force arrows */
+.fn {
+    transform: rotate(-90deg) translateX(25px);
+}
+.fn-label{
+    transform: rotate(90deg);
+}
+
+.ff {
+    transform: rotate(180deg) translateX(50px);
+}
+
+.ff-label {
+    transform:rotate(-180deg)
+}
+
+.fg {
+    transform: rotate(90deg) translateX(25px);
+}
+.fg-label {
+    transform: rotate(-90deg);
+}
+
+/* Solution section */
+.solution {
+    margin: 5%;
+}
