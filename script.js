@@ -190,14 +190,35 @@ function findAcc(m, theta, muK, inf1, inf1Angle) {
     const f1 = inf1 || 0
     const f1Angle = inf1Angle || 0
     let a = 9.81*Math.sin(theta*Math.PI/180)-9.81*Math.cos(theta*Math.PI/180)*muK+f1*Math.cos(f1Angle*Math.PI/180)/m
-    console.log(a)
+    console.log("a = ",a)
     return a
 }
 
 function findMass(a, ff, mu, theta) {
-    
+    let m = ff/(mu*9.81.Math.cos(theta*Math.PI/180))
+    console.log("m = ", m)
+    return(m)
 }
 
 function findFg(mass) {
-    return(mass*9.81)
+    let fg = mass*9.81
+    console.log("Fg = ", fg)
+    return(fg)
+}
+
+function findFf(mass, acc, theta){
+    let ff = mass*9.81*Math.sin(theta*Math.PI/180)-mass*acc
+    console.log("Ff = ", ff)
+    return ff
+}
+
+function findFn(mass, theta) {
+    let fn = mass*9.81*Math.cos(theta*Math.PI/180)
+    console.log("FN = ", fn)
+}
+
+function findMu(ff, fn) {
+    let mu = ff/fn
+    console.log("mu = ", mu)
+    return(mu)
 }
