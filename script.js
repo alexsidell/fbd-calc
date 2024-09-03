@@ -10,16 +10,30 @@ let tooltipEL = document.getElementById("help-icon")
 let formEl = document.querySelector(".form-inputs")
 let addForceEl = document.getElementById("add-force-button")
 let removeForceEl = document.getElementById("remove-force-button")
+let radioEL = document.querySelectorAll(".form-check")
 
 //Global variables
 let userFilled = {}
 let unfilled = {}
+let allVariables = { //to be updated by calc functions
+    option: 0, //radio option picked for solve (will determine order of calc functions)
+    a: 0,
+    m: 0,
+    mu: 0,
+    theta: 0,
+    f1: 0,
+    alpha: 0,
+    fg: 0,
+    fn: 0,
+    ff: 0,
+}
 
 //Add Event Listeners
 tooltipEL.addEventListener("click", showTip)
 formEl.addEventListener("submit", renderFBD)
 addForceEl.addEventListener("click", showExtForce)
 removeForceEl.addEventListener("click", removeExtForce)
+Array.prototype.map.call(radioEL, item => item.addEventListener("click", showInputs))
 
 //My Functions
 function showTip(){
@@ -38,7 +52,8 @@ function renderFBD(event) {
         console.log("Slope is defined by user")
         step3(userFilled.slope)
     }
-    findAcc(userFilled.mass, userFilled.slope, userFilled.muK, userFilled.f1, userFilled.f1Angle)
+    //findAcc(userFilled.mass, userFilled.slope, userFilled.muK, userFilled.f1, userFilled.f1Angle)
+    findTheta(0,0,0,0,0)
 }
 
 function showExtForce() {
@@ -59,13 +74,92 @@ function removeExtForce() {
     removeForceEl.classList.toggle("hidden")
 }
 
+function showInputs() {
+    
+    let optionID = this.childNodes[1].id
+    let optionNum = optionID[optionID.length-1]
+    let accEl = document.getElementById("acceleration")
+    let massEl = document.getElementById("mass")
+    let slopeEl = document.getElementById("slope")
+    let muEl = document.getElementById("friction-coefficient")
+    let f1El = document.getElementById("f1")
+    let alphaEl = document.getElementById("alpha")
+    console.log(optionNum)
+    switch (optionNum-1) {
+        case 0:
+            //looking for a
+            //knowns m, mu, theta
+            accEl.classList.add("hidden")
+            massEl.classList.remove("hidden")
+            slopeEl.classList.remove("hidden")
+            muEl.classList.remove("hidden")
+            f1El.classList.remove("hidden")
+            alphaEl.classList.remove("hidden")
+            break
+        case 1:
+            //looking for m 
+            //knowns: a, mu, theta
+            accEl.classList.remove("hidden")
+            massEl.classList.add("hidden")
+            slopeEl.classList.remove("hidden")
+            muEl.classList.remove("hidden")
+            f1El.classList.remove("hidden")
+            alphaEl.classList.remove("hidden")
+            break
+        case 2:
+            //looking for mu
+            //knowns: a, m, theta
+            accEl.classList.remove("hidden")
+            massEl.classList.remove("hidden")
+            slopeEl.classList.remove("hidden")
+            muEl.classList.add("hidden")
+            f1El.classList.remove("hidden")
+            alphaEl.classList.remove("hidden")
+            break
+        case 3:
+            //looking for theta
+            //knowns: a, m, mu
+            accEl.classList.remove("hidden")
+            massEl.classList.remove("hidden")
+            slopeEl.classList.add("hidden")
+            muEl.classList.remove("hidden")
+            f1El.classList.remove("hidden")
+            alphaEl.classList.remove("hidden")
+            break
+        case 4:
+            //looking for F1 
+            //knowns: a, m, mu, theta, alpha
+            accEl.classList.remove("hidden")
+            massEl.classList.remove("hidden")
+            slopeEl.classList.remove("hidden")
+            muEl.classList.remove("hidden")
+            f1El.classList.add("hidden")
+            alphaEl.classList.remove("hidden")
+            break
+        case 5:
+            //looking for alpha 
+            //knowns: a, m, mu, theta, F1
+            accEl.classList.remove("hidden")
+            massEl.classList.remove("hidden")
+            slopeEl.classList.remove("hidden")
+            muEl.classList.remove("hidden")
+            f1El.classList.remove("hidden")
+            alphaEl.classList.add("hidden")
+            break
+
+        default:
+            //Also option 0
+            accEl.classList.add("hidden")
+            massEl.classList.remove("hidden")
+            slopeEl.classList.remove("hidden")
+            muEl.classList.remove("hidden")
+    }
+}
 
 function getInputs() {
     let inMassEl = document.getElementById("in-mass")
     let inAccEl = document.getElementById("in-a")
     let inMuSEl = document.getElementById("in-mu-s")
-    let inMuKEl = document.getElementById("in-mu-k")
-    let inFfEl = document.getElementById("in-ff")
     let inPlaneSlopeEl = document.getElementById("in-plane-slope")
     let inF1El = document.getElementById("in-f1")
     let inF1AngleEl = document.getElementById("in-f1-angle")
@@ -73,8 +167,6 @@ function getInputs() {
         mass: inMassEl.value, 
         accel: inAccEl.value, 
         muS: inMuSEl.value, 
-        muK: inMuKEl.value, 
-        friction: inFfEl.value,
         slope: inPlaneSlopeEl.value, 
         f1: inF1El.value,
         f1Angle: inF1AngleEl.value
@@ -186,39 +278,81 @@ function sumYForces() {
 }
 
 //Find Unknowns
-function findAcc(m, theta, muK, inf1, inf1Angle) {
-    const f1 = inf1 || 0
-    const f1Angle = inf1Angle || 0
-    let a = 9.81*Math.sin(theta*Math.PI/180)-9.81*Math.cos(theta*Math.PI/180)*muK+f1*Math.cos(f1Angle*Math.PI/180)/m
-    console.log("a = ",a)
+function findAcc(m, theta, muK, f1, alpha) {
+    let radTheta = theta*Math.PI/180
+    let radAlpha = alpha*Math.PI/180
+    let g = 9.81
+    let a = -(mu*m*g*Math.sin(radTheta)-mu*f1*Math.cos(radAlpha))/m+g*Math.cos(radTheta)+f1*Math.sin(radAlpha)/m
+    console.log("a = ", a)
+    allVariables.a = a
     return a
 }
 
-function findMass(a, ff, mu, theta) {
-    let m = ff/(mu*9.81.Math.cos(theta*Math.PI/180))
+function findMass(a, mu, theta, f1, alpha) {
+    let radTheta = theta*Math.PI/180
+    let radAlpha = alpha*Math.PI/180
+    let g = 9.81
+    let m = (f1*Math.cos(radAlpha)-mu*f1*Math.sin(radAlpha))/(a+mu*g*Math.cos(radTheta)-g*Math.sin(radTheta))
     console.log("m = ", m)
+    allVariables.m =m
     return(m)
 }
 
 function findFg(mass) {
     let fg = mass*9.81
     console.log("Fg = ", fg)
+    allVariables.fg = fg
     return(fg)
 }
 
 function findFf(mass, acc, theta){
     let ff = mass*9.81*Math.sin(theta*Math.PI/180)-mass*acc
     console.log("Ff = ", ff)
+    allVariables.ff = ff
     return ff
 }
 
 function findFn(mass, theta) {
     let fn = mass*9.81*Math.cos(theta*Math.PI/180)
     console.log("FN = ", fn)
+    allVariables.fn = fn
+    return(fn)
 }
 
-function findMu(ff, fn) {
-    let mu = ff/fn
+function findMu(m, a, theta, f1, alpha) {
+    let radTheta = theta*Math.PI/180
+    let radAlpha = alpha*Math.PI/180
+    let g = 9.81
+    let mu = (m*g*Math.cos(radTheta)+f1*Math.sin(radAlpha)-m*a)/(m*g*Math.sin(radTheta)-f1*Math.cos(radAlpha))
     console.log("mu = ", mu)
+    allVariables.mu =mu
     return(mu)
+}
+
+function findF1(m, a, theta, mu, alpha) {
+    let radTheta = theta*Math.PI/180
+    let radAlpha = alpha*Math.PI/180
+    let g = 9.81
+    let f1 = (m*g*Math.sin(radTheta)-m*a-mu*m*g*Math.cos(radTheta))/(Math.cos(radAlpha)+mu*Math.sin(radAlpha))
+    console.log("F1 = ", f1)
+    allVariables.f1 = f1
+    return(f1)
+}
+
+function findAlpha(m, a, theta, mu, f1) {
+    let radTheta = theta*Math.PI/180
+    let g = 9.81
+    let alpha = 1/(Math.cos((m*g*sin(radTheta)-m*a-mu*m*g*Math.cos(radTheta))/(f1*Math.sqrt(1+mu^2))))+1/Math.tan(mu)
+    console.log("alpha = ", alpha)
+    allVariables.alpha = alpha
+    return(alpha)
+}
+
+async function findTheta(m, a, mu, f1, alpha) {
+    //This function requires simulatneous functions and calls for a better calc
+    const apiID = '7V6WLQ-RHJ5XL9WTX'
+    const url = `https://cors.io?api.wolframalpha.com/v2/query?appid=${apiID}&input=solve+for+tan%28theta%29+%3D+-0.6-%282%2F9.81-5%2F%283*9.81%29%29%2Fcos%28theta%29+from+-pi%2F2+to+pi%2F2&podstate=DecimalApproximation__More+digits`
+    const response = await fetch(url)
+    const data = await response.json()
+    console.log(data)
 }
