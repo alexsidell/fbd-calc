@@ -16,7 +16,7 @@ let radioEL = document.querySelectorAll(".form-check")
 let userFilled = {}
 let unfilled = {}
 let allVariables = { //to be updated by calc functions
-    option: 0, //radio option picked for solve (will determine order of calc functions)
+    option: 1, //radio option picked for solve (will determine order of calc functions)
     a: 0,
     m: 0,
     mu: 0,
@@ -42,18 +42,18 @@ function showTip(){
 }
 
 function renderFBD(event) {
+    console.log(allVariables)
     event.preventDefault()
     getInputs()
+    //if (allVariables.theta<0){allVariables.mu = -1*allVariables.mu}
     //Step 1 Render mass m (just HTML)
     //Step 2 render forces acting on mass m
     checkF1()
     //Check if the user defined the angle of the slope
-    if ("slope" in userFilled) {
-        console.log("Slope is defined by user")
-        step3(userFilled.slope)
-    }
-    //findAcc(userFilled.mass, userFilled.slope, userFilled.muK, userFilled.f1, userFilled.f1Angle)
-    findTheta(0,0,0,0,0)
+    findAcc()
+
+    step3(allVariables.theta)
+    
 }
 
 function showExtForce() {
@@ -84,7 +84,8 @@ function showInputs() {
     let muEl = document.getElementById("friction-coefficient")
     let f1El = document.getElementById("f1")
     let alphaEl = document.getElementById("alpha")
-    console.log(optionNum)
+    allVariables.option = optionNum
+    console.log(allVariables)
     switch (optionNum-1) {
         case 0:
             //looking for a
@@ -157,28 +158,24 @@ function showInputs() {
 }
 
 function getInputs() {
-    let inMassEl = document.getElementById("in-mass")
-    let inAccEl = document.getElementById("in-a")
-    let inMuSEl = document.getElementById("in-mu-s")
-    let inPlaneSlopeEl = document.getElementById("in-plane-slope")
-    let inF1El = document.getElementById("in-f1")
-    let inF1AngleEl = document.getElementById("in-f1-angle")
-    let userInputs = {
-        mass: inMassEl.value, 
-        accel: inAccEl.value, 
-        muS: inMuSEl.value, 
-        slope: inPlaneSlopeEl.value, 
-        f1: inF1El.value,
-        f1Angle: inF1AngleEl.value
-    }
-    filterInputs(userInputs)
+    allVariables.m = document.getElementById("in-mass").value
+    allVariables.a = document.getElementById("in-a").value
+    allVariables.mu = document.getElementById("in-mu-s").value
+    allVariables.theta = document.getElementById("in-plane-slope").value
+    allVariables.f1 = document.getElementById("in-f1").value
+    allVariables.alpha = document.getElementById("in-f1-angle").value
 }
 
 function checkF1() {
-    if ("f1" in unfilled) {
-        let f1Els = document.querySelectorAll(".f1")
+    // if ("f1" in unfilled) {
+    //     let f1Els = document.querySelectorAll(".f1")
+    //     f1Els.forEach((x) => x.classList.add("hidden"))
+    // }
+    let f1Els = document.querySelectorAll(".f1")
+    if ( allVariables.f1 == 0) {
         f1Els.forEach((x) => x.classList.add("hidden"))
     }
+    else { f1Els.forEach((x) => x.classList.remove("hidden"))}
 }
 
 function rotateLabel(label, x) {
@@ -215,19 +212,6 @@ function step3(slope) {
     }
 }
 
-function filterInputs(obj){
-    for (let i in obj) {
-        if (obj[i] == '') {
-            unfilled[i] = obj[i]
-        }
-        else {
-            userFilled[i] = obj[i]
-        }
-    }
-    console.log("Unfilled inputs: ", unfilled)
-    console.log("User filled inputs: ",userFilled)
-}
-
 /*
 Calculate magnitude of forces and adjust length
 accordingly
@@ -237,31 +221,32 @@ accordingly
 Identify forces that need to be broken down into
 their x and y components
 */
-function getFgXComponent(force, angle) {
-    angle = angle*Math.PI/180
-    let xComponent = force*Math.sin(angle)
-    console.log(xComponent)
-    return(xComponent)
+function getFgx() {
+    let fg = allVariables.fg
+    let theta = allVariables.theta*Math.PI/180
+    let fgx = fg*Math.sin(theta)
+    return fgx
 }
 
-function getFgYComponent(force, angle) {
-    angle = angle*Math.PI/180
-    let yComponent = force*Math.cos(angle)
-    console.log(yComponent)
-    return(yComponent)
-}
-function getF1XComponent(force, angle) {
-    angle = angle*Math.PI/180
-    let xComponent = force*Math.cos(angle)
-    console.log(xComponent)
-    return(xComponent)
+function getFgy() {
+    let fg = allVariables.fg
+    let theta = allVariables.theta*Math.PI/180
+    let fgy = fg*Math.cos(theta)
+    return fgy
 }
 
-function getF1YComponent(force, angle) {
-    angle = angle*Math.PI/180
-    let yComponent = force*Math.sin(angle)
-    console.log(yComponent)
-    return(yComponent)
+function getF1x() {
+    let f1 = allVariables.f1
+    let alpha = allVariables.alpha*Math.PI/180
+    let f1x = f1*Math.cos(alpha)
+    return f1x
+}
+
+function getF1y() {
+    let f1 = allVariables.f1
+    let alpha = allVariables.alpha*Math.PI/180
+    let f1y = f1*Math.sin(alpha)
+    return f1y
 }
 /*
 Identify positive and negative forces and 
@@ -278,14 +263,54 @@ function sumYForces() {
 }
 
 //Find Unknowns
-function findAcc(m, theta, muK, f1, alpha) {
-    let radTheta = theta*Math.PI/180
-    let radAlpha = alpha*Math.PI/180
-    let g = 9.81
-    let a = -(mu*m*g*Math.sin(radTheta)-mu*f1*Math.cos(radAlpha))/m+g*Math.cos(radTheta)+f1*Math.sin(radAlpha)/m
-    console.log("a = ", a)
-    allVariables.a = a
-    return a
+
+function findAcc() {
+    let m = allVariables.m
+    let theta = allVariables.theta*Math.PI/180
+    let mu = allVariables.mu
+    let f1 = allVariables.f1
+    let fg = getFg()
+    allVariables.fg = fg
+    let fgx = getFgx()
+    let fgy = getFgy()
+    let f1x = getF1x()
+    let f1y = getF1y()
+    let fn = fgy+f1y
+    allVariables.fn = fn
+    let ff = mu*fn
+    if (theta == 0 && f1 == 0) {ff = 0}
+    allVariables.ff = ff
+    console.log("fgy: ", fgy, "\nf1y: ", f1y)
+    console.log("ff: ", ff, "\nfgx: ", fgx, "\nf1x: ", f1x)
+    console.log("fn: ", fn)
+    if (0 < theta && theta <= Math.PI/2) {
+        console.log("Slope angled down to the right")
+        let a = (-1*ff+fgx+f1x)/m
+        if (a<0) {
+            console.log("recalculating...")
+            a = (ff+fgx+f1x)/m
+        }
+        allVariables.a = a
+    }
+    else if(-1*Math.PI/2 <= theta && theta < 0) {
+        console.log("Slope angled down to the left")
+        let a = (ff+fgx+f1x)/m
+        if(a>0){
+            console.log("recalculating...")
+            a = (-1*ff+fgx+f1x)/m
+        }
+        allVariables.a = a
+    }
+    else if(theta == 0) {
+        let a = (f1x-ff)/m
+        if (ff>f1x) {a = 0}
+        allVariables.a = a
+    }
+    console.log("If a if negative the mass is accelerating the left, if positive to the right.")
+    console.log("a: ", allVariables.a)
+    
+
+
 }
 
 function findMass(a, mu, theta, f1, alpha) {
@@ -305,15 +330,22 @@ function findFg(mass) {
     return(fg)
 }
 
-function findFf(mass, acc, theta){
-    let ff = mass*9.81*Math.sin(theta*Math.PI/180)-mass*acc
+function getFg() {
+    let m = allVariables.m
+    let g = 9.81
+    allVariables.fg = m*g
+    return(allVariables.fg)
+}
+
+function findFf(fgx, f1x, m, a){
+    let ff = fgx+f1x-m*a
     console.log("Ff = ", ff)
     allVariables.ff = ff
     return ff
 }
 
 function findFn(mass, theta) {
-    let fn = mass*9.81*Math.cos(theta*Math.PI/180)
+    let fn = mass*9.81*Math.sin(theta*Math.PI/180)+getF1YComponent(allVariables.f1, allVariables.alpha)
     console.log("FN = ", fn)
     allVariables.fn = fn
     return(fn)
@@ -348,11 +380,14 @@ function findAlpha(m, a, theta, mu, f1) {
     return(alpha)
 }
 
+//This doesn't work due to CORS issue
 async function findTheta(m, a, mu, f1, alpha) {
     //This function requires simulatneous functions and calls for a better calc
     const apiID = '7V6WLQ-RHJ5XL9WTX'
-    const url = `https://cors.io?api.wolframalpha.com/v2/query?appid=${apiID}&input=solve+for+tan%28theta%29+%3D+-0.6-%282%2F9.81-5%2F%283*9.81%29%29%2Fcos%28theta%29+from+-pi%2F2+to+pi%2F2&podstate=DecimalApproximation__More+digits`
-    const response = await fetch(url)
+    const url = `http://api.wolframalpha.com/v2/query?appid=7V6WLQ-RHJ5XL9WTX&input=solve+for+tan%28theta%29+%3D+-0.6-%282%2F9.81-5%2F%283*9.81%29%29%2Fcos%28theta%29+from+-pi%2F2+to+pi%2F2&podstate=DecimalApproximation__More+digits`
+    const response = await fetch(url, {headers: {        'Access-Control-Allow-Origin' : '*', 
+        'Access-Control-Allow-Methods' :    'GET'
+}},)
     const data = await response.json()
     console.log(data)
 }
