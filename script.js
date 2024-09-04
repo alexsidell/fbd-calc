@@ -26,6 +26,7 @@ let allVariables = { //to be updated by calc functions
     fg: 0,
     fn: 0,
     ff: 0,
+    recalculated: false,
 }
 
 //Add Event Listeners
@@ -45,7 +46,6 @@ function renderFBD(event) {
     console.log(allVariables)
     event.preventDefault()
     getInputs()
-    //if (allVariables.theta<0){allVariables.mu = -1*allVariables.mu}
     //Step 1 Render mass m (just HTML)
     //Step 2 render forces acting on mass m
     checkF1()
@@ -168,6 +168,11 @@ function getInputs() {
     allVariables.theta = document.getElementById("in-plane-slope").value
     allVariables.f1 = document.getElementById("in-f1").value
     allVariables.alpha = document.getElementById("in-f1-angle").value
+    let externalForceContainerEl = document.getElementById("external-force-container")
+    if (externalForceContainerEl.classList.contains("hidden")){
+        allVariables.f1=0
+        allVariables.alpha=0
+    }
 }
 
 function checkF1() {
@@ -200,26 +205,34 @@ function rotateLabel(label, x) {
     label.style.transform = `rotate(${(x*(-1)+angle)}deg)`
 }
 
-function step3(slope) {
+function step3() {
+    //Use global variables
+    let slope = parseFloat(allVariables.theta)
+    let alpha = parseFloat(allVariables.alpha)
     //Step 3 orient fbd so x is parallel to plane mass m is on
     let containerS3 = document.getElementById("step3-container")
     let labelsEl = document.querySelectorAll(".rotate-label")
     let fgEl = document.getElementById("step3-fg")
+    let f1El = document.getElementById("step3-f1")
     //Make sure Fg doesn't rotate with everything else
     let tranFgy = 25*(Math.tan((slope)*Math.PI/180))-4
     let tranFgx = 25/(Math.cos((slope)*Math.PI/180))-4
     fgEl.style.transform = `rotate(${(slope*-1)+90}deg) translate(${tranFgx}px, ${tranFgy}px)`
     containerS3.style.transform = `rotate(${slope}deg)` //Rotate container and all children
-
     for (let l of labelsEl) { //rotates labels for readability
         rotateLabel(l, slope)
     }
+    //Rotate Ff if slope is down to the left
+    if (allVariables.theta<0){
+        let ffEl = document.getElementById("step3-ff")
+        let ffLabelEL = document.getElementById("step3-ff-label")
+        console.log(ffEl)
+        ffEl.style.transform = "rotate(0deg) translateX(50px)"
+        ffLabelEL.style.transform = `rotate(${(-1)*slope}deg)`
+    }
+    f1El.style.transform = `rotate(${slope-alpha}deg) translateX(${50*Math.cos(alpha*Math.PI/180)}px) translateY(${100*Math.sin(alpha*Math.PI/180)-50}px)`
+    
 }
-
-/*
-Calculate magnitude of forces and adjust length
-accordingly
-*/
 
 /*
 Identify forces that need to be broken down into
@@ -257,17 +270,7 @@ Identify positive and negative forces and
 color them green and red
 */
 
-//Sum forces in x and y directions
-function sumXForces() {
-
-}
-
-function sumYForces() {
-
-}
-
 //Find Unknowns
-
 function findAcc() {
     let m = allVariables.m
     let theta = allVariables.theta*Math.PI/180
@@ -292,6 +295,7 @@ function findAcc() {
         let a = (-1*ff+fgx+f1x)/m
         if (a<0) {
             console.log("recalculating...")
+            allVariables.recalculated = true
             a = (ff+fgx+f1x)/m
         }
         allVariables.a = a
@@ -301,6 +305,7 @@ function findAcc() {
         let a = (ff+fgx+f1x)/m
         if(a>0){
             console.log("recalculating...")
+            allVariables.recalculated = true
             a = (-1*ff+fgx+f1x)/m
         }
         allVariables.a = a
@@ -403,6 +408,8 @@ function showWorkAcc() {
     }
     let f1y =''
     let f1x =''
+    let fillF1x = ''
+    let fillF1y = ''
     if (allVariables.f1 != 0){
         
         if (allVariables.alpha == 0) {
@@ -466,7 +473,8 @@ function showWorkAcc() {
         str7 = `a=(${parseFloat(allVariables.mu).toFixed(2)}(${getFgy().toFixed(2)}${fillF1y})-${getFgx().toFixed(2)})/${parseFloat(allVariables.m).toFixed(2)}`
     }
     let str8 = `a=${parseFloat(allVariables.a).toFixed(2)}m/s2`
-    let myStrings = [str1, str2, str3, str4, str5, str6, str7, str8]
+    let str9 = `Fg=${parseFloat(allVariables.fg).toFixed(2)}N, FN=${parseFloat(allVariables.fn).toFixed(2)}N, Ff=${parseFloat(allVariables.ff).toFixed(2)}N`
+    let myStrings = [str1, str2, str3, str4, str5, str6, str7, str8, str9]
     for (let s of myStrings) {
         let para = document.createElement('p')
         let node = document.createTextNode(s)

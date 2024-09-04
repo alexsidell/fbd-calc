@@ -15,6 +15,9 @@ header, footer{
 h1{
     font-size: 6vw;
 }
+h3{
+    margin-top: 0.5rem;
+}
 
 .hidden {
     display: none !important;
@@ -94,20 +97,25 @@ h1{
     background-color: whitesmoke;
     border: 1px grey solid;
     border-radius: 4px;
-    aspect-ratio: 1/1;
+    aspect-ratio: 3/2;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin:auto;
 }
-.fbd-container {
-    margin:5%;
+.divider {
+    height: 1px;
+    width: 85%;
+    background-color: #626e77;
+    margin-inline: auto;
 }
 
 .calc-container {
     background-color: whitesmoke;
     border: 1px grey solid;
     border-radius: 4px;
-    aspect-ratio: 4/3;
+    height: fit-content;
+    padding: 4%;
     display: flex;
     flex-direction: column;
     justify-content: center;
