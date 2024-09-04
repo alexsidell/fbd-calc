@@ -50,7 +50,11 @@ function renderFBD(event) {
     //Step 2 render forces acting on mass m
     checkF1()
     //Check if the user defined the angle of the slope
-    findAcc()
+    switch(allVariables.option) {
+        case 1:
+            findAcc()
+            showWorkAcc()
+    }
 
     step3(allVariables.theta)
     
@@ -390,4 +394,84 @@ async function findTheta(m, a, mu, f1, alpha) {
 }},)
     const data = await response.json()
     console.log(data)
+}
+
+function showWorkAcc() {
+    let showWorkAccEl = document.getElementById('show-work')
+    for (c of showWorkAccEl.childNodes){
+       showWorkAccEl.removeChild(c)
+    }
+    let f1y =''
+    let f1x =''
+    if (allVariables.f1 != 0){
+        
+        if (allVariables.alpha == 0) {
+            f1y = "+F1"
+            fillF1y = `+${getF1y().toFixed(2)}`
+        }
+        else if (allVariables.alpha == 90){
+            f1x = "+F1"
+            fillF1x = `+${getF1x().toFixed(2)}`
+        }
+        else if (allVariables.alpha == 180){
+            f1y = "-F1"
+            fillF1y = `${getF1y().toFixed(2)}`
+        }
+        else if (allVariables.alpha == 270){
+            f1x = "-F1"
+            fillF1x = `${getF1x().toFixed(2)}`
+        }
+        else if (allVariables.alpha>0 && allVariables.alpha<90) {
+            f1x = "+F1x"
+            f1y = "+F1y"
+            fillF1x = `+${getF1x().toFixed(2)}`
+            fillF1y = `+${getF1y().toFixed(2)}`
+        }
+        else if (allVariables.alpha>90 && allVariables.alpha<180) {
+            f1x = "-F1x"
+            f1y = "+F1y"
+            fillF1x = `${getF1x().toFixed(2)}`
+            fillF1y = `+${getF1y().toFixed(2)}`
+        }
+        else if (allVariables.alpha>180 && allVariables.alpha<270) {
+            f1x = "-F1x"
+            f1y = "-F1y"
+            fillF1x = `${getF1x().toFixed(2)}`
+            fillF1y = `${getF1y().toFixed(2)}`
+        }
+        else if (allVariables.alpha>270 && allVariables.alpha<360) {
+            f1x = "+F1x"
+            f1y = "-F1y"
+            fillF1x = `+${getF1x().toFixed(2)}`
+            fillF1y = `${getF1y().toFixed(2)}`
+        }
+    }
+    
+    if (allVariables.theta>=0){
+        str1 = `ΣFx=ma=-Ff+Fgx${f1x}`
+        str2 = `ΣFy=0=FN-Fgy${f1y}`
+        str3 = `FN=Fgy${f1y}`
+        str4 = `Ff=μFN`
+        str5 = `ma=-μ(Fgy${f1y})+Fgx${f1x}`
+        str6 = `a=(-μ(Fgy${f1y})+Fgx${f1x})/m`
+        str7 = `a=(${parseFloat(allVariables.mu).toFixed(2)}(${getFgy().toFixed(2)}${fillF1y})+${getFgx().toFixed(2)})/${parseFloat(allVariables.m).toFixed(2)}`
+    }
+    else {
+        str1 = `ΣFx=ma=Ff-Fgx${f1x}`
+        str2 = `ΣFy=0=FN-Fgy${f1y}`
+        str3 = `FN=Fgy${f1y}`
+        str4 = `Ff=μFN`
+        str5 = `ma=μ(Fgy${f1y})-Fgx${f1x}`
+        str6 = `a=(μ(Fgy${f1y})-Fgx${f1x})/m`
+        str7 = `a=(${parseFloat(allVariables.mu).toFixed(2)}(${getFgy().toFixed(2)}${fillF1y})-${getFgx().toFixed(2)})/${parseFloat(allVariables.m).toFixed(2)}`
+    }
+    let str8 = `a=${parseFloat(allVariables.a).toFixed(2)}m/s2`
+    let myStrings = [str1, str2, str3, str4, str5, str6, str7, str8]
+    for (let s of myStrings) {
+        let para = document.createElement('p')
+        let node = document.createTextNode(s)
+        para.appendChild(node)
+        showWorkAccEl.appendChild(para)
+    }
+    
 }
