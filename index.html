@@ -26,90 +26,91 @@
                 </p>
             </div>
         </div>
-        <p>Select from the following options to proceed</p>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios1" value="option1" checked>
-            <label class="form-check-label" for="inputRadios1">
-              Knowns: mass <em>m</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios2" value="option2">
-            <label class="form-check-label" for="inputRadios2">
-                Knowns: acceleration <em>a</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios3" value="option2">
-            <label class="form-check-label" for="inputRadios3">
-                Knowns: acceleration <em>a</em>, mass <em>m</em>, and slope angle <em>θ</em>.
-            </label>
-          </div>
-          <div class="form-check hidden">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios4" value="option2">
-            <label class="form-check-label" for="inputRadios4">
-                Knowns: acceleration <em>a</em>, mass <em>m</em>, and friction coefficient <em>μ</em>.
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios5" value="option2">
-            <label class="form-check-label" for="inputRadios5">
-                Looking for: Unknown external force angle <em>α</em> at known external force <em>F<sub>1</sub></em> 
-                <br>and known acceleration <em>a</em>, mass <em>m</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios6" value="option2">
-            <label class="form-check-label" for="inputRadios6">
-                Looking for: Unknown external force <em>F<sub>1</sub></em> at known angle <em>α</em>, 
-                <br>and known acceleration <em>a</em>, mass <em>m</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
-            </label>
-          </div>
-
+        <section class="hidden">
+            <p>Select from the following options to proceed</p>
+            <div class="form-check hidden">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios1" value="option1" checked>
+                <label class="form-check-label" for="inputRadios1">
+                Knowns: mass <em>m</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios2" value="option2">
+                <label class="form-check-label" for="inputRadios2">
+                    Knowns: acceleration <em>a</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios3" value="option2">
+                <label class="form-check-label" for="inputRadios3">
+                    Knowns: acceleration <em>a</em>, mass <em>m</em>, and slope angle <em>θ</em>.
+                </label>
+            </div>
+            <div class="form-check hidden">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios4" value="option2">
+                <label class="form-check-label" for="inputRadios4">
+                    Knowns: acceleration <em>a</em>, mass <em>m</em>, and friction coefficient <em>μ</em>.
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios5" value="option2">
+                <label class="form-check-label" for="inputRadios5">
+                    Looking for: Unknown external force angle <em>α</em> at known external force <em>F<sub>1</sub></em> 
+                    <br>and known acceleration <em>a</em>, mass <em>m</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="inputRadios6" value="option2">
+                <label class="form-check-label" for="inputRadios6">
+                    Looking for: Unknown external force <em>F<sub>1</sub></em> at known angle <em>α</em>, 
+                    <br>and known acceleration <em>a</em>, mass <em>m</em>, friction coefficient <em>μ</em>, and slope angle <em>θ</em>.
+                </label>
+            </div>
+        </section>
 
         <form action="" method="get" class="form-inputs"> 
             <!-- Have inputs but checked to be numbers -->
             <div id="mass">
-                <legend>Mass</legend>
+                <label for="mass">Mass</label>
                 <div class="input-container" >
-                    <input type="number" step="0.01" name="mass" placeholder="m" id="in-mass"/> 
-                    <label>kg</label>
+                    <input type="number" step="0.01" name="mass" placeholder="m" id="in-mass" required/> 
+                    <legend>kg</legend>
                 </div>
             </div>
             <div id="acceleration" class="hidden">
                 <legend>Acceleration</legend>
                 <div class="input-container" >
                     <input type="number" step="0.01"  name="acceleration" placeholder="a" id="in-a"/> 
-                    <label>m/s<sup>2</sup></label>
+                    <legend>m/s<sup>2</sup></legend>
                 </div>
             </div>
             <div id="friction-coefficient">
-                <legend>Friction coefficient</legend>
+                <label for="mu-s">Friction coefficient</label>
                 <div class="input-container" >
-                    <input type="number" step="0.01"  name="mu-s" placeholder="μs" id="in-mu-s"/> 
+                    <input type="number" step="0.01"  name="mu-s" placeholder="μs" id="in-mu-s" required/> 
                 </div>
             </div>
           
             <div id="slope">
-                <legend>Slope of plane</legend>
+                <label for="theta">Slope of plane</label>
                 <div class="input-container">
-                    <input type="number" step="0.01"  name="theta" placeholder="θ" id="in-plane-slope"/> 
-                    <label>°</label>
+                    <input type="number" step="0.01"  name="theta" placeholder="θ" id="in-plane-slope" required/> 
+                    <legend>°</legend>
                 </div>
             </div>
             <div class="hidden" id="external-force-container">
                 <div id="f1">
-                    <legend>External force</legend>
+                    <label for="f1">External force</label>
                     <div class="input-container">
                     <input type="number" step="0.01"  name="f1" placeholder="F1" id="in-f1"/> 
-                        <label>N</label>
+                        <legend>N</legend>
                     </div>
                 </div>
                 <div id="alpha">
-                    <legend>Angle of external force</legend>
+                    <label for="alpha">Angle of external force</legend>
                     <div class="input-container">
-                        <input type="number" step="0.01"  name="theta" placeholder="θ" id="in-f1-angle"/> 
-                        <label>°</label>
+                        <input type="number" step="0.01"  name="alpha" placeholder="θ" id="in-f1-angle"/> 
+                        <legend>°</legend>
                     </div>
                 </div>
             </div>
@@ -128,7 +129,7 @@
     <div class="divider"></div>
     <section class="solution">
         <!-- Step by step solve for net force on body -->
-         <section class="step">
+         <section class="step step1">
             <h3>Step 1</h3>
             <p>Identify the body of interest. It will have mass <em>m</em>, 
                 and is shown as a block in the diagram above.</p>
@@ -136,7 +137,7 @@
                 <div class="mass-1">m</div>
             </section>
          </section>
-         <section class="step">
+         <section class="step step2">
             <h3>Step 2</h3>
             <p>Identify the forces acting on the object. The force due to gravity is denoted as <em>F<sub>g</sub></em>
             , the normal force is denoted as <em>F<sub>N</sub></em>, and the force due to friction is 
@@ -170,12 +171,12 @@
                 </div>
             </section>
          </section>
-         <section class="step">
+         <section class="step step3">
             <h3>Step 3</h3>
             <p>Orient your axis so that the x-axis is parallel to the plane your object of intrest is sitting on.</p>
             <section class="fbd">
                 <div class="angle-container" id="step3-container">
-                    <div class="mass-1" id="step3-mass">m</div>
+                    <div class="mass-1 step3-mass" id="step3-mass">m</div>
                     <div class="slope"></div>
                     <div class="arrow-container fn">
                         <div class="arrow-top"></div>
@@ -183,19 +184,19 @@
                         <div class="arrow-body"></div>
                         <p class="arrow-label rotate-label fn-label">[F<sub>N</sub>]</p>
                     </div>
-                    <div class="arrow-container f1" id="step3-f1">
-                        <div class="arrow-top"></div>
-                        <div class="arrow-bottom"></div>
-                        <div class="arrow-body"></div>
-                        <p class="arrow-label rotate-label f1-label" id="step3-f1-label">[F<sub>1</sub>]</p>
+                    <div class="f1 step3-f1" id="step3-f1">
+                        <div class="arrow-top f1" id="f1-top"></div>
+                        <div class="arrow-bottom f1" id="f1-bottom"></div>
+                        <div class="arrow-body f1" id="f1-body"></div>
+                        <p class="arrow-label rotate-label f1-label- f1-label-step3" >[F<sub>1</sub>]</p>
                     </div>
-                    <div class="arrow-container ff" id="step3-ff">
+                    <div class="arrow-container ff step3-ff" id="step3-ff">
                         <div class="arrow-top"></div>
                         <div class="arrow-bottom"></div>
                         <div class="arrow-body"></div>
                         <p class="arrow-label rotate-label ff-label" id="step3-ff-label">[F<sub>f</sub>]</p>
                     </div>
-                    <div class="arrow-container fg" id="step3-fg">
+                    <div class="arrow-container fg step3-fg" id="step3-fg">
                         <div class="arrow-top"></div>
                         <div class="arrow-bottom"></div>
                         <div class="arrow-body"></div>
@@ -204,53 +205,101 @@
                 </div> 
             </section>
          </section>
-         <section class="step">
+         <section class="step step4">
             <h3>Step 4</h3>
             <p>Break down force into their x and y components using trigonometry.</p>
             <section class="fbd">
-                <div class="angle-container">
+                <div class="angle-container" id="step4-container">
                     <div class="mass-1">m</div>
                     <div class="slope"></div>
-                    <div class="arrow-container step4" id="f1">
+                    <div class="arrow-container f1 step4" id="f1y">
                         <div class="arrow-top"></div>
                         <div class="arrow-bottom"></div>
-                        <div class="arrow-body"></div>
-                        <p class="arrow-label">[F<sub>1</sub>]</p>
+                        <div class="arrow-body" id="f1y-body"></div>
+                        <p class="arrow-label rotate-label f1y-label" id="f1y-label">[F<sub>1y</sub>]</p>
                     </div>
-                    <div class="arrow-container step4" id="ff">
+                    <div class="arrow-container f1 step4" id="f1x">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body" id="f1x-body"></div>
+                        <p class="arrow-label rotate-label f1x-label" id="f1x-label">[F<sub>1x</sub>]</p>
+                    </div>
+                    <div class="arrow-container fg step4" id="fgy">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body" id="fgy-body"></div>
+                        <p class="arrow-label rotate-label fgy-label" id="fgy-label">[F<sub>gy</sub>]</p>
+                    </div>
+                    <div class="arrow-container fg step4" id="fgx">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body" id="fgx-body"></div>
+                        <p class="arrow-label rotate-label fgx-label" id="fgx-label">[F<sub>gx</sub>]</p>
+                    </div>
+                    <div class="arrow-container step4 ff" id="step4-ff">
                         <div class="arrow-top"></div>
                         <div class="arrow-bottom"></div>
                         <div class="arrow-body"></div>
-                        <p class="arrow-label" id="ff-label">[F<sub>f</sub>]</p>
+                        <p class="arrow-label rotate-label ff-label" id="step4-ff-label">[F<sub>f</sub>]</p>
+                    </div>
+                    <div class="arrow-container fn" id="step4-fn">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label rotate-label fn-label">[F<sub>N</sub>]</p>
                     </div>
                 </div> 
             </section>
          </section>
-         <section class="step">
+         <section class="step step5">
             <h3>Step 5</h3>
             <p>Identify which forces are positive and negative. Forces in going to the right or up are postitive,
                 and forces going to the left or down are negative. 
             </p>
             <section class="fbd">
-                <div class="angle-container">
+                <div class="angle-container" id="step5-container">
                     <div class="mass-1">m</div>
                     <div class="slope"></div>
-                    <div class="arrow-container step5" id="f1">
+                    <div class="arrow-container f1 step5" id="step5-f1y">
                         <div class="arrow-top"></div>
                         <div class="arrow-bottom"></div>
                         <div class="arrow-body"></div>
-                        <p class="arrow-label">[F<sub>1</sub>]</p>
+                        <p class="arrow-label rotate-label f1y-label" id="step5-f1y-label">[F<sub>1y</sub>]</p>
                     </div>
-                    <div class="arrow-container step5" id="ff">
+                    <div class="arrow-container f1 step5" id="step5-f1x">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body" ></div>
+                        <p class="arrow-label rotate-label f1x-label" id="step5-f1x-label">[F<sub>1x</sub>]</p>
+                    </div>
+                    <div class="arrow-container fg step5" id="step5-fgy">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body" ></div>
+                        <p class="arrow-label rotate-label fgy-label" id="step5-fgy-label">[F<sub>gy</sub>]</p>
+                    </div>
+                    <div class="arrow-container fg step5" id="step5-fgx">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body" ></div>
+                        <p class="arrow-label rotate-label fgx-label" id="step5-fgx-label">[F<sub>gx</sub>]</p>
+                    </div>
+                    <div class="arrow-container step5 ff" id="step5-ff">
                         <div class="arrow-top"></div>
                         <div class="arrow-bottom"></div>
                         <div class="arrow-body"></div>
-                        <p class="arrow-label" id="ff-label">[F<sub>f</sub>]</p>
+                        <p class="arrow-label rotate-label ff-label" id="step5-ff-label">[F<sub>f</sub>]</p>
+                    </div>
+                    <div class="arrow-container step5 fn" id="step5-fn">
+                        <div class="arrow-top"></div>
+                        <div class="arrow-bottom"></div>
+                        <div class="arrow-body"></div>
+                        <p class="arrow-label rotate-label fn-label">[F<sub>N</sub>]</p>
                     </div>
                 </div> 
             </section>
          </section>
-         <section class="step">
+         <section class="step step6">
             <h3>Step 6</h3>
             <p>Sum your forces in the x and y directions and solve for your unknowns. </p>
             <div class="calc-container" id="show-work"></div>

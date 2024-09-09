@@ -50,13 +50,16 @@ function renderFBD(event) {
     //Step 2 render forces acting on mass m
     checkF1()
     //Check if the user defined the angle of the slope
-    switch(allVariables.option) {
-        case 1:
-            findAcc()
-            showWorkAcc()
-    }
-
+    // switch(allVariables.option) { //commented out until all radio button options work
+    //     case 1:
+    //         findAcc()
+    //         showWorkAcc()
+    // }
+    findAcc()
+    showWorkAcc()
     step3(allVariables.theta)
+    step4()
+    step5()
     
 }
 
@@ -162,12 +165,12 @@ function showInputs() {
 }
 
 function getInputs() {
-    allVariables.m = document.getElementById("in-mass").value
-    allVariables.a = document.getElementById("in-a").value
-    allVariables.mu = document.getElementById("in-mu-s").value
-    allVariables.theta = document.getElementById("in-plane-slope").value
-    allVariables.f1 = document.getElementById("in-f1").value
-    allVariables.alpha = document.getElementById("in-f1-angle").value
+    allVariables.m = parseFloat(document.getElementById("in-mass").value)
+    allVariables.a = parseFloat(document.getElementById("in-a").value)
+    allVariables.mu = parseFloat(document.getElementById("in-mu-s").value)
+    allVariables.theta = parseFloat(document.getElementById("in-plane-slope").value)
+    allVariables.f1 = parseFloat(document.getElementById("in-f1").value)
+    allVariables.alpha = parseFloat(document.getElementById("in-f1-angle").value)
     let externalForceContainerEl = document.getElementById("external-force-container")
     if (externalForceContainerEl.classList.contains("hidden")){
         allVariables.f1=0
@@ -201,6 +204,21 @@ function rotateLabel(label, x) {
             case "fn-label":
                 angle = 90
                 break
+            case "f1-label":
+                angle = allVariables.alpha
+                break
+            case "fgx-label":
+                angle = 0
+                if (allVariables.theta<0){
+                    angle = 180
+                }
+                break
+            case "fgy-label":
+                angle = -90
+                break
+            default:
+                angle = 0
+                break
         }
     label.style.transform = `rotate(${(x*(-1)+angle)}deg)`
 }
@@ -214,23 +232,45 @@ function step3() {
     let labelsEl = document.querySelectorAll(".rotate-label")
     let fgEl = document.getElementById("step3-fg")
     let f1El = document.getElementById("step3-f1")
+    let containerS4 = document.getElementById("step4-container")
+    let containerS5 = document.getElementById("step5-container")
     //Make sure Fg doesn't rotate with everything else
     let tranFgy = 25*(Math.tan((slope)*Math.PI/180))-4
     let tranFgx = 25/(Math.cos((slope)*Math.PI/180))-4
     fgEl.style.transform = `rotate(${(slope*-1)+90}deg) translate(${tranFgx}px, ${tranFgy}px)`
     containerS3.style.transform = `rotate(${slope}deg)` //Rotate container and all children
+    containerS4.style.transform = `rotate(${slope}deg)` //Rotate container and all children
+    containerS5.style.transform = `rotate(${slope}deg)` //Rotate container and all children
     for (let l of labelsEl) { //rotates labels for readability
         rotateLabel(l, slope)
     }
+    f1El.style.transform = `rotate(${-1*alpha}deg)`
+    // let f1BodyEl = document.getElementById("f1-body")
+    // f1BodyEl.style.width = "100px"
+    // f1BodyEl.style.transform = "translateX(-50px)"
     //Rotate Ff if slope is down to the left
     if (allVariables.theta<0){
         let ffEl = document.getElementById("step3-ff")
-        let ffLabelEL = document.getElementById("step3-ff-label")
+        let ffLabelEl = document.getElementById("step3-ff-label")
+        let ff4El = document.getElementById("step4-ff")
+        let ffLabel4El = document.getElementById("step4-ff-label")
+        let ff5El = document.getElementById("step5-ff")
+        let ffLabel5El = document.getElementById("step5-ff-label")
         console.log(ffEl)
         ffEl.style.transform = "rotate(0deg) translateX(50px)"
-        ffLabelEL.style.transform = `rotate(${(-1)*slope}deg)`
+        ffLabelEl.style.transform = `rotate(${(-1)*slope}deg)`
+        ff4El.style.transform = "rotate(0deg) translateX(50px)"
+        ffLabel4El.style.transform = `rotate(${(-1)*slope}deg)`
+        ff5El.style.transform = "rotate(0deg) translateX(50px)"
+        ffLabel5El.style.transform = `rotate(${(-1)*slope}deg)`
+        if (allVariables.f1!=0){
+            ffEl.style.transform = "rotate(0deg) translateX(50px) translateY(15px)"
+            ff4El.style.transform = "rotate(0deg) translateX(50px) translateY(15px)"
+            ff5El.style.transform = "rotate(0deg) translateX(50px) translateY(15px)"
+            f1El.style.transform = `rotate(${-1*alpha}deg) translateX(${50*Math.cos(alpha*Math.PI/180)}px) translateY(${-25*Math.sin(alpha*Math.PI/180)+10}px)`
+        }
     }
-    f1El.style.transform = `rotate(${slope-alpha}deg) translateX(${50*Math.cos(alpha*Math.PI/180)}px) translateY(${100*Math.sin(alpha*Math.PI/180)-50}px)`
+    
     
 }
 
@@ -481,5 +521,232 @@ function showWorkAcc() {
         para.appendChild(node)
         showWorkAccEl.appendChild(para)
     }
+}
+
+function step4() {
+    let f1yEl = document.getElementById("f1y")
+    let f1xEl = document.getElementById("f1x")
+    let f1yLabelEl = document.getElementById("f1y-label")
+    let f1xLabelEl = document.getElementById("f1x-label")
+    let fgxEl = document.getElementById("fgx")
+    let fgyEl = document.getElementById("fgy")
+    let fnEl = document.getElementById("step4-fn")
+    let ffEl = document.getElementById("step4-ff")
+    let alpha = allVariables.alpha
+    let theta = allVariables.theta
+    if (theta>0){
+        fgxEl.style.transform = "translateX(50px)"
+    }
+    else if (theta<0) {
+        fgxEl.style.transform = "rotate(180deg) translateX(50px)"
+    }
+    else {
+        fgxEl.classList.add("hidden")
+    }
+    if (allVariables.f1!=0){
+        
+        if (alpha < 90) {
+            f1yEl.style.transform = "rotate(-90deg) translateY(25px) translateX(25px)"
+            f1xEl.style.transform = "translateY(15px) translateX(50px)"
+            fnEl.style.transform = "rotate(-90deg) translateY(-25px) translateX(25px)"
+            if (theta>0){
+                fgxEl.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            else if (theta<0){
+                ffEl.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            f1yLabelEl.style.transform = `rotate(${-1*theta+90}deg)`
+        }
+        else if (alpha >= 90 && alpha < 180) {
+            f1yEl.style.transform = "rotate(-90deg) translateY(25px) translateX(25px)"
+            f1xEl.style.transform = "rotate(180deg) translateY(-15px) translateX(50px)"
+            fnEl.style.transform = "rotate(-90deg) translateY(-25px) translateX(25px)"
+            f1yLabelEl.style.transform = `rotate(${-1*theta+90}deg)`
+            f1xLabelEl.style.transform = `rotate(${-1*theta+180}deg)`
+            if (theta>0) {
+                ffEl.style.transform = "rotate(180deg) translateY(15px) translateX(50px)"
+            }
+            else if (theta<0){
+                fgxEl.style.transform = "rotate(180deg) translateX(50px) translateY(15px)"
+            }
+        }
+        else if (alpha >= 180 && alpha < 270) {
+            f1yEl.style.transform = "rotate(90deg) translateY(25px) translateX(25px)"
+            f1xEl.style.transform = "rotate(180deg) translateY(-15px) translateX(50px)"
+            fgyEl.style.transform = "rotate(90deg) translateY(-25px) translateX(25px)"
+            if (theta>0) {
+                ffEl.style.transform = "rotate(180deg) translateY(15px) translateX(50px)"
+            }
+            else if (theta<0){
+                ffEl.style.transform = "rotate(0deg) translateX(50px)"
+                fgxEl.style.transform = "rotate(180deg) translateX(50px) translateY(15px)"
+            }
+            f1yLabelEl.style.transform = `rotate(${-1*theta+270}deg)`
+            f1xLabelEl.style.transform = `rotate(${-1*theta+180}deg)`
+        }
+        else if (alpha >= 270 && alpha < 360){
+            f1xEl.style.transform = "translateY(15px) translateX(50px)"
+            f1yEl.style.transform = "rotate(90deg) translateY(25px) translateX(25px)"
+            if (theta>0){
+                fgxEl.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            else if (theta<0){
+                ffEl.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            fgyEl.style.transform = "rotate(90deg) translateY(-25px) translateX(25px)"
+            f1yLabelEl.style.transform = `rotate(${-1*theta+270}deg)`
+        }
+    }
+
+    let f1yEl5 = document.getElementById("step5-f1y")
+    let f1xEl5 = document.getElementById("step5-f1x")
+    let f1yLabelEl5 = document.getElementById("step5-f1y-label")
+    let f1xLabelEl5 = document.getElementById("step5-f1x-label")
+    let fgxEl5 = document.getElementById("step5-fgx")
+    let fgyEl5 = document.getElementById("step5-fgy")
+    let fnEl5 = document.getElementById("step5-fn")
+    let ffEl5 = document.getElementById("step5-ff")
+    if (theta>0){
+        fgxEl5.style.transform = "translateX(50px)"
+    }
+    else if (theta<0) {
+        fgxEl5.style.transform = "rotate(180deg) translateX(50px)"
+    }
+    else {
+        fgxEl5.classList.add("hidden")
+    }
+    if (allVariables.f1!=0){
+        
+        if (alpha < 90) {
+            f1yEl5.style.transform = "rotate(-90deg) translateY(25px) translateX(25px)"
+            f1xEl5.style.transform = "translateY(15px) translateX(50px)"
+            fnEl5.style.transform = "rotate(-90deg) translateY(-25px) translateX(25px)"
+            if (theta>0){
+                fgxEl5.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            else if (theta<0){
+                ffEl5.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            f1yLabelEl5.style.transform = `rotate(${-1*theta+90}deg)`
+        }
+        else if (alpha >= 90 && alpha < 180) {
+            f1yEl5.style.transform = "rotate(-90deg) translateY(25px) translateX(25px)"
+            f1xEl5.style.transform = "rotate(180deg) translateY(-15px) translateX(50px)"
+            fnEl5.style.transform = "rotate(-90deg) translateY(-25px) translateX(25px)"
+            f1yLabelEl5.style.transform = `rotate(${-1*theta+90}deg)`
+            f1xLabelEl5.style.transform = `rotate(${-1*theta+180}deg)`
+            if (theta>0) {
+                ffEl5.style.transform = "rotate(180deg) translateY(15px) translateX(50px)"
+            }
+            else if (theta<0){
+                fgxEl5.style.transform = "rotate(180deg) translateX(50px) translateY(15px)"
+            }
+        }
+        else if (alpha >= 180 && alpha < 270) {
+            f1yEl5.style.transform = "rotate(90deg) translateY(25px) translateX(25px)"
+            f1xEl5.style.transform = "rotate(180deg) translateY(-15px) translateX(50px)"
+            fgyEl5.style.transform = "rotate(90deg) translateY(-25px) translateX(25px)"
+            if (theta>0) {
+                ffEl5.style.transform = "rotate(180deg) translateY(15px) translateX(50px)"
+            }
+            else if (theta<0){
+                ffEl5.style.transform = "rotate(0deg) translateX(50px)"
+                fgxEl5.style.transform = "rotate(180deg) translateX(50px) translateY(15px)"
+            }
+            f1yLabelEl5.style.transform = `rotate(${-1*theta+270}deg)`
+            f1xLabelEl5.style.transform = `rotate(${-1*theta+180}deg)`
+        }
+        else if (alpha >= 270 && alpha < 360){
+            f1xEl5.style.transform = "translateY(15px) translateX(50px)"
+            f1yEl5.style.transform = "rotate(90deg) translateY(25px) translateX(25px)"
+            if (theta>0){
+                fgxEl5.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            else if (theta<0){
+                ffEl5.style.transform = "translateX(50px) translateY(-15px)"
+            }
+            fgyEl5.style.transform = "rotate(90deg) translateY(-25px) translateX(25px)"
+            f1yLabelEl5.style.transform = `rotate(${-1*theta+270}deg)`
+        }
+    }
     
+}
+
+function step5() {
+    let f1x = document.getElementById("step5-f1x")
+    let f1y = document.getElementById("step5-f1y")
+    let fgx = document.getElementById("step5-fgx")
+    let fgy = document.getElementById("step5-fgy")
+    let ff = document.getElementById("step5-ff")
+    let fn = document.getElementById("step5-fn")
+
+    let alpha = allVariables.alpha
+    let theta = allVariables.theta
+
+    let positive = []
+    let negative = []
+
+    if (theta>=0) {
+        if (alpha<=90){
+            negative = [ff, fgy]
+            positive = [f1x, fgx, fn, f1y]
+        }
+        else if (alpha>90 && alpha <=180){
+            negative = [fgy,ff,f1x]
+            positive = [fn, f1y, fgx]
+        }
+        else if (alpha>180 && alpha<=270){
+            negative = [ff, fgy,f1x,f1y]
+            postive = [fgx,fn]
+        }
+        else if (alpha>270 && alpha<=360) {
+            negative = [ff, f1y, fgy]
+            positive = [fn, fgx, f1x]
+        }
+    }
+    else {
+        if (alpha<=90){
+            negative = [fgx,fgy]
+            positive = [f1x, ff, fn, f1y]
+        }
+        else if (alpha>90 && alpha <=180){
+            negative = [fgx,f1x,fgy]
+            positive = [ff, fn, f1y]
+        }
+        else if (alpha>180 && alpha<=270){
+            negative = [fgx, f1x, fgy, f1y]
+            postive = [fn, ff]
+        }
+        else if (alpha>270 && alpha<=360) {
+            negative = [fgx, fgy, f1y]
+            positive = [fn, ff, f1x]
+        }
+    }
+    for(let x of positive) {
+        //console.log(x.childNodes)
+        for (let y of x.childNodes){
+            console.log(y.hasChildNodes())
+            if(!y.hasChildNodes()){
+                try {
+                    y.style.backgroundColor = "#469556"
+                    y.style.height = "2px"
+                }
+                catch (e) {}
+            }
+        }
+    }
+    for(let x of negative) {
+        //console.log(x.childNodes)
+        for (let y of x.childNodes){
+            console.log(y.hasChildNodes())
+            if(!y.hasChildNodes()){
+                try {
+                    y.style.backgroundColor = "#D33C3C"
+                    y.style.height = "2px"
+                }
+                catch (e) {}
+            }
+        }
+    }
+
 }

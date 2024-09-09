@@ -2,6 +2,7 @@
 body {
     font-family: 'Roboto Mono';
     margin: 0;
+    height: fit-content;
 }
 
 header, footer{
@@ -102,6 +103,7 @@ h3{
     justify-content: center;
     align-items: center;
     margin:auto;
+    max-width: 450px;
 }
 .divider {
     height: 1px;
@@ -214,8 +216,50 @@ h3{
 .fg-label {
     transform: rotate(-90deg);
 }
-
+.f1.arrow-top {
+    transform: rotate(45deg);
+    left: 86px;
+    top: -6px;
+}
+.f1.arrow-bottom {
+    transform: rotate(-45deg);
+    left: 86px;
+    top: 6px;
+}
+.f1.arrow-body {
+    height: 1px;
+    width: 100px;
+    background-color: #171717;
+    position: absolute; 
+}
+.f1-label-step3 {
+    left: 100px;
+}
 /* Solution section */
 .solution {
     margin: 5%;
+    display: flex;
+    flex-direction: column;
+}
+p{
+    font-size: 18px;
+}
+
+@media (min-width: 768px) {
+    .solution{
+        margin: 5%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5%;
+        justify-content: center;
+        max-width: 1790px;
+    }
+    .step {
+        max-width: 400px;
+    }
+    p {
+        font-size: 24px;
+    }
+
 }
